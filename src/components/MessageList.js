@@ -5,11 +5,11 @@ import Message from './Message.js';
   const MessageList = ({ messages, handlers }) => {
   // let message = messages.map((message, index) => <Message key={index} message={message} toggleSelected={toggleSelected}/>);
 
-  let message = messages.map((message, index) => <Message key={index} message={message} handlers={handlers}/>);
+  let messageList = messages.map((message, index) => <Message key={index} message={message} handlers={handlers}/>);
 
   return (
     <div>
-      {message}
+      {messageList}
     </div>
   )
 }

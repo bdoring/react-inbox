@@ -70,6 +70,7 @@ class App extends Component {
   }
 
   handlers = {
+
     handleStateUpdate: (messageToBeUpdated, action) => {
       let index;
       let messagesStateCopy = this.state.messages.map((message, i) => {
@@ -78,8 +79,6 @@ class App extends Component {
         }
         return {...message}
       });
-
-      console.log("HANDLE STATE UPDATE:", action);
 
       action(messagesStateCopy, index);
 
@@ -90,14 +89,44 @@ class App extends Component {
 
       messagesStateCopy[index].selected = !messagesStateCopy[index].selected;
 
+    },
+
+    toggleStar: (messagesStateCopy, index) => {
+
+      messagesStateCopy[index].starred = !messagesStateCopy[index].starred;
+    },
+
+    toolbarSelector: (selectorClass) => {
+      let messagesStateCopy = this.state.messages.map((message) => {
+        return {...message};
+      });
+
+      console.log("messagesStateCopy before if", messagesStateCopy)
+
+      if (selectorClass.includes('check')) {
+        messagesStateCopy = messagesStateCopy.map(message => {
+          message.selected = false;
+          return message;
+        });
+      } else {
+        messagesStateCopy = messagesStateCopy.map(message => {
+          message.selected = true
+          return message;
+        });
+      }
+
+      console.log("messagesStateCopy after if", messagesStateCopy)
+
+      this.setState({ messages: messagesStateCopy });
+
     }
   }
 
   render() {
+    console.log("STATE APP.JS", this.state);
     return (
       <div className="App">
-        <Toolbar />
-        {/* <MessageList messages={this.state.messages} toggleSelected={this.toggleSelected} handleStateUpdate={this.handleStateUpdate}/> */}
+        <Toolbar messages={this.state.messages} toolbarSelector={this.handlers.toolbarSelector}/>
         <MessageList messages={this.state.messages} handlers={this.handlers}/>
       </div>
     );

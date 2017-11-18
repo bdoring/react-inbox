@@ -19,11 +19,10 @@ const Message = ({ message, handlers }) => {
       <div className="col-xs-1">
         <div className="row">
           <div className="col-xs-2">
-            {/* <input type="checkbox" checked={checked} onChange={() => toggleSelected(message)} /> */}
             <input type="checkbox" checked={checked} onChange={() => handlers.handleStateUpdate(message, handlers.toggleSelected)} />
           </div>
           <div className="col-xs-2">
-            <i className={`star fa fa-star${starred}`}></i>
+            <i className={`star fa fa-star${starred}`} onClick={() => handlers.handleStateUpdate(message, handlers.toggleStar)}></i>
           </div>
         </div>
       </div>
