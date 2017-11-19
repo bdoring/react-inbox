@@ -2,7 +2,6 @@ import React from 'react';
 
 // const Message = ({ message, toggleSelected }) => {
 const Message = ({ message, handlers }) => {
-  console.log("HANDLERS:", handlers)
 
   let readMessage = message.read ? "read" : "unread";
 
@@ -28,7 +27,7 @@ const Message = ({ message, handlers }) => {
       </div>
       <div className="col-xs-11">
         {labels}
-        <a href="">
+        <a href="" onClick={(e) => e.preventDefault()}>
           {message.subject}
         </a>
       </div>

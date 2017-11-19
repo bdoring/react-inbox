@@ -96,12 +96,15 @@ class App extends Component {
       messagesStateCopy[index].starred = !messagesStateCopy[index].starred;
     },
 
-    toolbarSelector: (selectorClass) => {
-      let messagesStateCopy = this.state.messages.map((message) => {
+    toolbarCopyCurrentState: () => {
+      return this.state.messages.map((message) => {
         return {...message};
       });
+    },
 
-      console.log("messagesStateCopy before if", messagesStateCopy)
+    toolbarSelector: (selectorClass) => {
+
+      let messagesStateCopy = this.handlers.toolbarCopyCurrentState();
 
       if (selectorClass.includes('check')) {
         messagesStateCopy = messagesStateCopy.map(message => {
@@ -115,18 +118,72 @@ class App extends Component {
         });
       }
 
-      console.log("messagesStateCopy after if", messagesStateCopy)
-
       this.setState({ messages: messagesStateCopy });
 
+    },
+
+    toolbarMarkAsReadOrUnread: (trueOrFalse) => {
+      console.log('clicked')
+      let messagesStateCopy = this.handlers.toolbarCopyCurrentState();
+
+      messagesStateCopy = messagesStateCopy.map(message => {
+        if (message.selected) {
+          message.read = trueOrFalse;
+        }
+        return message;
+      });
+
+      this.setState({ messages: messagesStateCopy});
+    },
+
+    toolbarDelete: () => {
+      let messagesStateCopy = this.handlers.toolbarCopyCurrentState();
+
+      messagesStateCopy = messagesStateCopy.filter(message => !message.selected);
+
+      this.setState({ messages: messagesStateCopy});
+    },
+
+    toolbarAddLabel: (labelName) => {
+      let messagesStateCopy = this.handlers.toolbarCopyCurrentState();
+
+      messagesStateCopy = messagesStateCopy.map(message => {
+        if (message.selected) {
+          if (!message.labels.includes(labelName)) {
+            message.labels = message.labels.slice(0);
+            message.labels.push(labelName);
+          }
+        }
+        return message;
+      })
+      this.setState({ messages: messagesStateCopy});
+    },
+
+    toolbarRemoveLabel: (labelName) => {
+      let messagesStateCopy = this.handlers.toolbarCopyCurrentState();
+
+      messagesStateCopy = messagesStateCopy.map(message => {
+        if (message.selected) {
+          if (message.labels.includes(labelName)) {
+            message.labels = message.labels.slice(0);
+            message.labels.splice(message.labels.indexOf(labelName), 1);
+          }
+        }
+        return message;
+      })
+
+      this.setState({ messages: messagesStateCopy});
+
     }
+
   }
 
   render() {
     console.log("STATE APP.JS", this.state);
     return (
       <div className="App">
-        <Toolbar messages={this.state.messages} toolbarSelector={this.handlers.toolbarSelector}/>
+        {/* <Toolbar messages={this.state.messages} toolbarSelector={this.handlers.toolbarSelector}/> */}
+        <Toolbar messages={this.state.messages} handlers={this.handlers}/>
         <MessageList messages={this.state.messages} handlers={this.handlers}/>
       </div>
     );
